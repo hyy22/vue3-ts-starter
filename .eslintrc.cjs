@@ -9,6 +9,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:vue/vue3-essential',
     'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
   ],
   overrides: [],
   parser: 'vue-eslint-parser',
@@ -21,6 +22,7 @@ module.exports = {
   rules: {
     'vue/no-duplicate-attributes': 'off',
     'vue/valid-v-for': 'off',
+    'vue/multi-word-component-names': 'off', // 组件命名允许单个单词
+    '@typescript-eslint/no-explicit-any': 'off', // ts允许any
   },
-  ignorePatterns: ['*.html', 'dist/*'], // 忽略文件
 };
