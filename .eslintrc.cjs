@@ -24,5 +24,7 @@ module.exports = {
     'vue/valid-v-for': 'off',
     'vue/multi-word-component-names': 'off', // 组件命名允许单个单词
     '@typescript-eslint/no-explicit-any': 'off', // ts允许any
+    '@typescript-eslint/no-non-null-assertion': 'off', // ts允许非空断言
+    '@typescript-eslint/ban-ts-comment': 'off', // ts允许通过注释禁用
   },
 };
