@@ -1,5 +1,3 @@
-import { FunctionType } from '@/types/utils';
-
 class EventBus {
   private _callbacks: { [key: string]: FunctionType[] } = {};
   // 监听事件

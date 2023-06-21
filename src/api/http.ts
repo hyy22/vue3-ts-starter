@@ -1,4 +1,3 @@
-import { ObjectType } from '@/types/utils';
 import axios, {
   AxiosInstance,
   AxiosError,
