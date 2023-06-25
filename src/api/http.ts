@@ -1,7 +1,7 @@
 import axios, {
   AxiosInstance,
   AxiosError,
-  InternalAxiosRequestConfig,
+  AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
 import { useUserStore } from '@/store/user';
@@ -12,8 +12,7 @@ export interface AxiosRequestConfigExtra {
   // 是否允许重复请求
   allowMultiple?: boolean;
 }
-export type HttpRequestConfig = InternalAxiosRequestConfig &
-  AxiosRequestConfigExtra;
+export type HttpRequestConfig = AxiosRequestConfig & AxiosRequestConfigExtra;
 
 let loadingCount = 0; // 需要loading的请求个数
 const requestQueueMap = new Map(); // 请求map队列
@@ -86,20 +85,24 @@ function handleRequestComplete(config: HttpRequestConfig) {
  * 请求拦截
  */
 service.interceptors.request.use(
-  (config: HttpRequestConfig) => {
+  config => {
     const reqKey = buildReqKey(config);
+    // 类型转换
+    const httpConfig: HttpRequestConfig = config;
     // 去重
-    if (!config.allowMultiple && requestQueueMap.has(reqKey)) {
+    if (!httpConfig.allowMultiple && requestQueueMap.has(reqKey)) {
       requestQueueMap.get(reqKey).controller?.abort?.();
     }
     const controller = new AbortController();
-    config.signal = controller.signal; // 添加中断信号
+    httpConfig.signal = controller.signal; // 添加中断信号
     requestQueueMap.set(reqKey, { controller });
     // loading
-    if (config.loading) {
+    if (httpConfig.loading) {
       loadingCount++;
       const loadingText =
-        typeof config.loading === 'string' ? config.loading : '加载中...';
+        typeof httpConfig.loading === 'string'
+          ? httpConfig.loading
+          : '加载中...';
       loadingUtil.show(loadingText);
     }
     // 设置token
