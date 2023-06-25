@@ -160,7 +160,7 @@ interface ResponseData<T> extends ObjectType {
   msg?: string;
   data: T;
 }
-export default async function request<T>(
+export default async function request<T = any>(
   config: HttpRequestConfig
 ): Promise<ResponseData<T>> {
   try {
