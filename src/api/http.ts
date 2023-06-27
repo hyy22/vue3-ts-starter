@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { useUserStore } from '@/store/user';
+import useLoading from '@/components/Loading/useLoading';
 
 export interface AxiosRequestConfigExtra {
   // 是否显示loading
@@ -23,19 +24,14 @@ const service: AxiosInstance = axios.create({
 /**
  * loading处理
  */
-interface Loading {
-  setText: (msg: string) => void;
-  close: () => void;
-}
 interface LoadingUtil {
-  loadingInstance: null | Loading;
+  loadingInstance: null | ReturnType<typeof createLoadingInstance>;
   show: (msg: string) => void;
   close: () => void;
 }
-// TODO:创建loading实例待实现
+// 创建loading实例
 function createLoadingInstance(msg: string) {
-  console.log(msg);
-  return null;
+  return useLoading({ text: msg });
 }
 const loadingUtil: LoadingUtil = {
   loadingInstance: null,
@@ -157,7 +153,7 @@ service.interceptors.response.use(
 // 定义接口返回结构
 interface ResponseData<T> extends ObjectType {
   code: number | string;
-  msg?: string;
+  msg: string;
   data: T;
 }
 export default async function request<T = any>(

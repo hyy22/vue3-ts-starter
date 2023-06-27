@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 export interface ToastOptions {
   title: string;
@@ -8,21 +8,32 @@ export interface ToastOptions {
 const props = withDefaults(defineProps<ToastOptions>(), {
   during: 2000,
 });
+defineEmits<{
+  (e: 'destroy'): true;
+}>();
 const visible = ref(false);
+function close() {
+  visible.value = false;
+}
 let timer: ReturnType<typeof setTimeout>;
 onMounted(function () {
-  if (timer) clearTimeout(timer);
   visible.value = true;
   // 计时
   timer = setTimeout(() => {
     visible.value = false;
   }, props.during);
 });
+onBeforeUnmount(function () {
+  clearTimeout(timer);
+});
+defineExpose({
+  close,
+});
 </script>
 
 <template>
-  <Transition name="fade" appear>
-    <div class="toast" v-if="visible">{{ props.title }}</div>
+  <Transition name="fade" appear @after-leave="$emit('destroy')">
+    <div class="toast" v-show="visible">{{ props.title }}</div>
   </Transition>
 </template>
 
