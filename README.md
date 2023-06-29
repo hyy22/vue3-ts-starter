@@ -11,6 +11,7 @@
 - [x] 一些公共方法&类型
 - [x] fontawesome图标
 - [x] 内置组件 Toast & Loading
+- [x] 支持tailwind css
 
 ## 使用
 
