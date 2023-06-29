@@ -3,11 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faHomeUser } from '@fortawesome/free-solid-svg-icons';
 import useLoading from '@/components/Loading/useLoading';
 import useToast from '@/components/Toast/useToast';
+import { ElMessage } from 'element-plus';
+import { reactive } from 'vue';
 
 function showLoading() {
   const loading = useLoading({ text: 'loading...', themeColor: '#f40' });
   setTimeout(() => loading.close(), 3000);
 }
+function showMessage() {
+  ElMessage.info('hello element plus');
+}
+interface Form {
+  date: string;
+}
+const form: Form = reactive({
+  date: '',
+});
 </script>
 
 <template>
@@ -32,6 +43,18 @@ function showLoading() {
       <button class="button" @click="useToast('hello world')"
         >点击显示toast</button
       >
+    </div>
+    <!-- element plus -->
+    <div class="mt-5">
+      <el-button class="mb-5" @click="showMessage" type="primary"
+        >点击显示message</el-button
+      >
+      <el-form>
+        <el-date-picker
+          v-model="form.date"
+          placeholder="选择日期"
+          value-format="YYYY-MM-DD"></el-date-picker>
+      </el-form>
     </div>
   </div>
 </template>

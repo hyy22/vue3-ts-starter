@@ -1,9 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-:root {
-  --primary-color: #ff0000
-}
 /* 过渡动画 */
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.25s ease-in-out;

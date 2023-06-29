@@ -4,10 +4,14 @@ interface UserInfo extends ObjectType {
   // 假设有个id
   id: number;
 }
+interface UserStore {
+  token: string;
+  userInfo: UserInfo | null;
+}
 export const useUserStore = defineStore('user', {
-  state: () => ({
+  state: (): UserStore => ({
     token: '',
-    userInfo: null as UserInfo | null,
+    userInfo: null,
   }),
   actions: {
     setToken(tk: string) {
