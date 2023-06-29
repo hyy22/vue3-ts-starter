@@ -11,3 +11,18 @@
 - [x] 一些公共方法&类型
 - [x] fontawesome图标
 - [x] 内置组件 Toast & Loading
+
+## 使用
+
+```bash
+# 安装
+yarn # npm install
+# 初始化
+yarn prepare # npm run prepare
+# 开发
+yarn dev # npm run dev
+# 打包
+yarn build # npm run build
+# 预览
+yarn preview # npm run preview
+```
