@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
-import dynamicRoutes from '@/router/dynamicRoutes';
+import { dynamicRoutes } from '@/router';
 
 interface PermissionStore {
   keys: string[];
