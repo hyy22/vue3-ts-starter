@@ -13,10 +13,10 @@ export default defineConfig({
     vue(),
     ElementPlus({ useSource: true }), // 自动导入css文件
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
     }),
   ],
   css: {
