@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import 'vue-router';
 interface ImportMetaEnv {
   readonly VITE_APP_NAME: string;
   readonly VITE_API_BASE_URL: string;
@@ -11,3 +12,11 @@ interface ImportMeta {
 }
 // 定义模块
 declare module 'element-plus/dist/locale/zh-cn.mjs';
+declare module 'vue-router' {
+  interface RouteMeta {
+    title?: string;
+    permission?: string;
+    icon?: string;
+    hidden?: boolean;
+  }
+}

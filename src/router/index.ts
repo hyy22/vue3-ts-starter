@@ -9,24 +9,30 @@ const Layout = () => import('@/components/Layouts/Layout.vue');
 const Login = () => import('@/views/auth/login.vue');
 const Forbidden = () => import('@/views/exception/403.vue');
 const NotFound = () => import('@/views/exception/404.vue');
-/**
- * 获取第一个可跳转路由
- * @param routes
- * @returns
- */
-function getFirstRoute(routes: RouteRecordRaw[]): RouteRecordRaw | undefined {
-  for (const route of routes) {
-    if (!route.children) return route;
-    if (!route.children.length) continue;
-    return getFirstRoute(route.children);
-  }
-}
+const Landing = () => import('@/views/landing.vue');
+
 /**
  * 静态路由
  */
 const staticRoutes: RouteRecordRaw[] = [
-  { path: '/login', name: 'Login', component: Login },
-  { path: '/403', name: '403', component: Forbidden },
+  {
+    path: '/login',
+    name: 'Login',
+    meta: { title: '登录', hidden: true },
+    component: Login,
+  },
+  {
+    path: '/403',
+    name: '403',
+    meta: { title: '没有权限', hidden: true },
+    component: Forbidden,
+  },
+  {
+    path: '/landing',
+    name: 'landing',
+    meta: { title: '加载', hidden: true },
+    component: Landing,
+  },
 ];
 /**
  * 动态路由
@@ -67,12 +73,15 @@ router.beforeEach((to, _from, next) => {
     else {
       // 没生成菜单
       if (!permissionStore.addRoutes.length) {
+        // 删除之前路由
+        if (router.hasRoute('NotFound')) router.removeRoute('NotFound');
+        if (router.hasRoute('Home')) router.removeRoute('Home');
         const addRoutes = permissionStore.generateRoutes();
         // 添加Home路由
         const homeRoute: RouteRecordRaw = {
           path: '/',
           name: 'Home',
-          redirect: getFirstRoute(addRoutes),
+          redirect: '/landing',
           component: Layout,
           children: addRoutes,
         };

@@ -20,11 +20,16 @@ export const usePermissionStore = defineStore('permission', {
     },
     setPermission(val: string[]) {
       this.keys = val;
+      // 每次权限变更都重新渲染菜单
+      this.addRoutes = [];
     },
     generateRoutes() {
       const addRoutes = filterAccessRoutes(dynamicRoutes, this.keys);
       this.addRoutes = addRoutes;
       return addRoutes;
+    },
+    getFirstRoute() {
+      return getFirstRoute(dynamicRoutes, this.keys);
     },
   },
 });
@@ -34,16 +39,40 @@ function filterAccessRoutes(
   routes: RouteRecordRaw[] = [],
   permissions: string[]
 ): RouteRecordRaw[] {
-  return routes.filter(route => {
+  const accessRoutes: RouteRecordRaw[] = [];
+  for (const route of routes) {
     if (
       !route?.meta?.permission ||
       permissions.includes(route.meta.permission as string)
     ) {
-      if (route.children) {
-        route.children = filterAccessRoutes(route.children, permissions);
+      const newRoute: RouteRecordRaw = {
+        ...route,
+      };
+      if (newRoute.children?.length) {
+        newRoute.children = filterAccessRoutes(newRoute.children, permissions);
       }
-      return true;
+      accessRoutes.push(newRoute);
     }
-    return false;
-  });
+  }
+  return accessRoutes;
+}
+
+// 获取动态路由第一项
+function getFirstRoute(
+  routes: RouteRecordRaw[],
+  permissions: string[]
+): RouteRecordRaw | undefined {
+  for (const route of routes) {
+    if (!route.children) {
+      if (
+        !route?.meta?.permission ||
+        permissions.includes(route.meta.permission as string)
+      ) {
+        return route;
+      }
+    } else {
+      const result = getFirstRoute(route.children, permissions);
+      if (result) return result;
+    }
+  }
 }
