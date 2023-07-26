@@ -9,6 +9,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "types": ["element-plus/global"],
 
     /* Bundler mode */
     "moduleResolution": "Node", // 设置为bundler报错
