@@ -8,5 +8,5 @@ export default {
     },
     { type: 'input', name: 'title', message: '输入项目标题，如后台管理系统' },
   ],
-  files: ['package.json', 'index.html'],
+  files: ['package.json', '.env'],
 };

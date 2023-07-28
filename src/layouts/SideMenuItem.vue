@@ -10,8 +10,8 @@ const props = defineProps<Props>();
 <template>
   <template v-if="!props.menu.meta?.hidden">
     <el-menu-item v-if="!props.menu.children" :index="props.menu.path">
-      <el-icon>
-        <component :is="props.menu.meta?.icon"></component>
+      <el-icon v-if="props.menu.meta?.icon">
+        <component :is="props.menu.meta.icon"></component>
       </el-icon>
       <template #title>{{ props.menu.meta?.title }}</template>
     </el-menu-item>
@@ -19,8 +19,8 @@ const props = defineProps<Props>();
       v-else-if="props.menu.children.some(v => !v.meta?.hidden)"
       :index="props.menu.path">
       <template #title>
-        <el-icon>
-          <component :is="props.menu.meta?.icon"></component>
+        <el-icon v-if="props.menu.meta?.icon">
+          <component :is="props.menu.meta.icon"></component>
         </el-icon>
         <span>{{ props.menu.meta?.title }}</span>
       </template>

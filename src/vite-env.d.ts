@@ -11,12 +11,3 @@ interface ImportMeta {
 }
 // 定义模块
 declare module 'element-plus/dist/locale/zh-cn.mjs';
-import 'vue-router';
-declare module 'vue-router' {
-  interface RouteMeta {
-    title?: string;
-    permission?: string;
-    icon?: string;
-    hidden?: boolean;
-  }
-}

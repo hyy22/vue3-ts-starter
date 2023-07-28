@@ -9,3 +9,7 @@
 .fade-leave-to {
   opacity: 0;
 }
+/* 容器 */
+.container {
+  padding: 20px;
+}

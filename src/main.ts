@@ -1,7 +1,9 @@
 import { createApp } from 'vue';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import * as directives from './directives';
+import * as components from './components';
 import '@/styles/index.css';
+import '@/styles/theme.scss';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -10,6 +12,10 @@ import store from './store';
 const app = createApp(App);
 // 注册elementplus图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component);
+}
+// 全局组件
+for (const [key, component] of Object.entries(components)) {
   app.component(key, component);
 }
 // 自定义权限指令

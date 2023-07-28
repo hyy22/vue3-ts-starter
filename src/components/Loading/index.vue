@@ -11,7 +11,7 @@ export interface Props {
   zIndex?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
-  themeColor: '#4e8efd',
+  themeColor: 'var(--primary-color)',
   mask: true,
   maskColor: 'rgba(0,0,0,0.1)',
   zIndex: 999,

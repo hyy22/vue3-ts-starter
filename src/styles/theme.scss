@@ -1,0 +1,19 @@
+$primary-color: #facd00;
+body {
+  // 主色
+  --primary-color: #{$primary-color};
+  // tab栏背景色
+  --tabbar-item-bg: #{rgba($primary-color, 0.1)};
+  /**
+   * element-ui 主题配置
+  **/
+  // 主色调
+  --el-color-primary: #{$primary-color};
+  // menu组件
+  --el-menu-border-color: #24262f;
+  --el-menu-bg-color: #24262f;
+  --el-menu-text-color: #fff;
+  --el-menu-hover-text-color: #{$primary-color};
+  --el-menu-hover-bg-color: #000;
+  --el-menu-active-color: #{$primary-color};
+}
