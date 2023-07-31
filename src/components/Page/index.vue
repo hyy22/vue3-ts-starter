@@ -5,11 +5,11 @@ export default {
 </script>
 
 <script setup lang="ts">
-const props = defineProps({
-  pageSizes: {
-    type: Array,
-    default: () => [10, 20, 50, 100],
-  },
+interface Props {
+  pageSizes?: number[];
+}
+const props = withDefaults(defineProps<Props>(), {
+  pageSizes: () => [10, 20, 50, 100],
 });
 const emit = defineEmits(['change', 'update:current-page', 'update:page-size']);
 function handleCurrentPageChange(page: number) {

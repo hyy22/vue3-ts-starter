@@ -6,6 +6,7 @@ interface FetchLoginByAccountParams {
   password: string;
 }
 export function fetchLoginByAccount(params: FetchLoginByAccountParams) {
+  console.log('params', params);
   return Promise.resolve({
     code: 200,
     data: {
@@ -27,6 +28,7 @@ interface FetchUpdatePasswordParams {
   newPassword: string;
 }
 export function fetchUpdatePassword(params: FetchUpdatePasswordParams) {
+  console.log('params', params);
   return Promise.resolve({
     code: 200,
     data: {},
