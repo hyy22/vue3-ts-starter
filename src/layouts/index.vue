@@ -13,7 +13,7 @@ const stateStore = useStateStore();
   <div class="flex h-screen overflow-hidden">
     <!-- 侧边栏 -->
     <SideBar class="flex-none" />
-    <div class="flex-1 flex flex-col bg-gray-100">
+    <div class="flex-1 flex flex-col bg-gray-100 min-w-0">
       <!-- 菜单栏 -->
       <MenuBar />
       <!-- 标签栏 -->
@@ -21,11 +21,9 @@ const stateStore = useStateStore();
       <!-- 内容 -->
       <div class="flex-1 m-2 bg-white rounded overflow-y-auto">
         <router-view v-slot="{ Component }" :key="route.fullPath">
-          <transition name="fade" mode="out-in">
-            <keep-alive :include="stateStore.keepAliveTabs">
-              <component :is="Component"></component>
-            </keep-alive>
-          </transition>
+          <keep-alive :include="stateStore.keepAliveTabs">
+            <component :is="Component"></component>
+          </keep-alive>
         </router-view>
       </div>
     </div>

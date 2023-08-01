@@ -121,8 +121,7 @@ onBeforeRouteUpdate(function (to) {
   }
 }
 .tabbar-item {
-  @apply h-9 px-2 ml-1 flex items-center justify-center text-sm rounded-t-lg cursor-pointer text-gray-600;
-  background: var(--tabbar-item-bg);
+  @apply h-9 px-2 ml-1 flex items-center justify-center text-sm rounded-t-lg cursor-pointer text-gray-600 border border-gray-100;
   .icon {
     @apply rounded-full ml-1;
     &:hover {
@@ -132,7 +131,8 @@ onBeforeRouteUpdate(function (to) {
 }
 .tabbar-item:hover,
 .tabbar-item.active {
-  background: var(--primary-color);
-  color: #fff;
+  background: var(--tabbar-item-bg);
+  color: var(--primary-color);
+  font-weight: bold;
 }
 </style>

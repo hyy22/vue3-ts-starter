@@ -3,7 +3,7 @@ body {
   // 主色
   --primary-color: #{$primary-color};
   // tab栏背景色
-  --tabbar-item-bg: #{rgba($primary-color, 0.1)};
+  --tabbar-item-bg: #{rgba($primary-color, 0.15)};
   /**
    * element-ui 主题配置
   **/
