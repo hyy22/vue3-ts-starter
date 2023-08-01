@@ -19,6 +19,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '账户管理',
           icon: 'User',
+          keepAlive: true,
         },
       },
       {

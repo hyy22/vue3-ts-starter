@@ -78,7 +78,9 @@ onBeforeRouteUpdate(function (to) {
           v-for="tab of stateStore.tabs"
           :key="tab.path"
           :class="{ 'tabbar-item': true, active: tab.path === route.fullPath }">
-          <router-link :to="tab.path">{{ tab.title }}</router-link>
+          <router-link :to="tab.path" class="h-full flex items-center">{{
+            tab.title
+          }}</router-link>
           <el-icon class="icon" @click="closeTab(tab)"><Close /></el-icon>
         </div>
       </div>

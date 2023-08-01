@@ -20,9 +20,9 @@ const stateStore = useStateStore();
       <TabBar />
       <!-- 内容 -->
       <div class="flex-1 m-2 bg-white rounded overflow-y-auto">
-        <router-view v-slot="{ Component }" :key="route.fullPath">
+        <router-view v-slot="{ Component }">
           <keep-alive :include="stateStore.keepAliveTabs">
-            <component :is="Component"></component>
+            <component :is="Component" :key="route.fullPath"></component>
           </keep-alive>
         </router-view>
       </div>
