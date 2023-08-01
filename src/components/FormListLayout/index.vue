@@ -1,12 +1,12 @@
 <script setup lang="ts">
 interface Props {
-  page?: Page | boolean;
+  page?: PageType | boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
   page: false,
 });
 const emit = defineEmits<{
-  (e: 'page-change', val: Page): void;
+  (e: 'page-change', val: PageType): void;
 }>();
 
 /**
@@ -18,8 +18,8 @@ function onPageCurrentChange(e: number) {
 function onPageSizeChange(e: number) {
   onPageChange({ pageSize: e });
 }
-function onPageChange(p: Partial<Page>) {
-  const page = Object.assign({}, props.page as Page, p);
+function onPageChange(p: Partial<PageType>) {
+  const page = Object.assign({}, props.page as PageType, p);
   emit('page-change', page);
 }
 </script>

@@ -3,12 +3,12 @@ import { reactive, ref } from 'vue';
 import { Search, Refresh, Plus } from '@element-plus/icons-vue';
 import FormListLayout from '@/components/FormListLayout/index.vue';
 
-const page: Page = reactive({
+const page: PageType = reactive({
   current: 1,
   pageSize: 20,
   total: 0,
 });
-function handlePageChange(p: Page) {
+function handlePageChange(p: PageType) {
   Object.assign(page, p);
 }
 const searchFormData = () => ({
