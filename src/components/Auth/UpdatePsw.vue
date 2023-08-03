@@ -53,7 +53,7 @@ function submitUpdatePasswordModal() {
     setTimeout(() => {
       const userStore = useUserStore();
       userStore.logout();
-    });
+    }, 1000);
   });
 }
 defineExpose({
