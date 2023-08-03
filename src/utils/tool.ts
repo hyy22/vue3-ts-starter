@@ -169,3 +169,18 @@ export function pickNumberFromString(
   }
   return result;
 }
+
+/**
+ * 根据参数缓存函数结果
+ * @param fn
+ * @returns
+ */
+export function memo(fn: FunctionType) {
+  const cache = Object.create(null);
+  return async function (...args: any) {
+    const key = JSON.stringify(args);
+    if (cache[key]) return cache[key];
+    cache[key] = await fn(...args);
+    return cache[key];
+  };
+}
