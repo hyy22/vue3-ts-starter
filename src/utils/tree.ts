@@ -36,32 +36,51 @@ function excludeProperty<T, K extends keyof T>(obj: T, prop: K): Omit<T, K> {
  * @returns
  */
 interface List2TreeOptions {
-  value: (row: ObjectType) => string | number; // value获取方法
-  label: (row: ObjectType) => string | number; // label获取方法
-  parentValue: (row: ObjectType) => string | number; // 父值获取方法
-  rootValue: string | number; // 根值
+  value?: (row: ObjectType) => string | number; // value获取方法
+  label?: (row: ObjectType) => string | number; // label获取方法
+  parentValue?: (row: ObjectType) => string | number; // 父值获取方法
+  rootValue?: string | number; // 根值
 }
 export function list2Tree(
   list: ObjectType[],
-  { value, label, parentValue, rootValue = '' }: List2TreeOptions
+  options: List2TreeOptions = {}
 ): TreeItem[] {
+  // 默认取值方式
+  const {
+    value = r => r.id,
+    label = r => r.label,
+    parentValue = r => r.parentId,
+    rootValue,
+  } = options;
+  // step1 添加快速访问
   const map = new Map();
   for (const item of list) {
     map.set(value(item), item);
   }
-  return list.reduce((prev: TreeItem[], cur) => {
-    const p = parentValue(cur);
-    const row = Object.assign(cur, { id: value(cur), label: label(cur) });
-    if (p === rootValue) {
-      prev.push(row);
-    } else {
-      const parent = map.get(p);
-      if (parent) {
-        parent.children ? parent.children.push(row) : (parent.children = [row]);
-      }
+  // step2 分配子级
+  for (const item of list) {
+    const pidVal = parentValue(item);
+    const idVal = value(item);
+    const labelVal = label(item);
+    Object.assign(item, { id: idVal, label: labelVal });
+    // 判断是否需要添加到children
+    const parentItem = map.get(pidVal);
+    if (parentItem) {
+      // 添加标识 _isLeaf
+      item.__isLeaf__ = true;
+      // 添加到children
+      parentItem.children
+        ? parentItem.children.push(item)
+        : (parentItem.children = [item]);
     }
-    return prev;
-  }, []);
+  }
+  // step3 生成treelist
+  return list.filter(v => {
+    // 设置特定root就取root，否则取全部
+    const hasRootValue = typeof rootValue !== 'undefined' && rootValue !== null;
+    const idVal = value(v);
+    return hasRootValue ? idVal === rootValue : !v.__isLeaf__;
+  }) as TreeItem[];
 }
 
 /**
