@@ -43,3 +43,14 @@ ksbl-cli template set vue3-ts-template git@github.com:hyy22/vue3-ts-starter.git#
 # 初始化项目 可以使用-I选项初始化git -i安装依赖 -m修改包管理工具，默认npm
 ksbl-cli create -t vue3-ts-template xxx-web
 ```
+
+## element-plus模版说明
+
+- [x] element-plus接入
+- [x] layout，支持多tab、keep-alive
+- [x] 权限控制
+- [x] 状态管理
+- [x] 常用组件封装
+- [x] 常用工具函数
+
+![预览.png](./screenshots/1.png)
