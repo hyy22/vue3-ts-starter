@@ -7,7 +7,7 @@ import { usePermissionStore } from '@/store/permission';
 import setting from './setting';
 
 const Login = () => import('@/views/auth/login.vue');
-const Forbidden = () => import('@/views/exception/401.vue');
+const Forbidden = () => import('@/views/exception/403.vue');
 const NotFound = () => import('@/views/exception/404.vue');
 const Layout = () => import('@/layouts/index.vue');
 const Landing = () => import('@/views/landing.vue');
@@ -22,8 +22,8 @@ const staticRoutes: RouteRecordRaw[] = [
     meta: { title: '登录', hidden: true },
   },
   {
-    path: '/401',
-    name: '401',
+    path: '/403',
+    name: '403',
     component: Forbidden,
     meta: { title: '没有权限', hidden: true },
   },
@@ -54,7 +54,7 @@ const router = createRouter({
  * 路由全局解析守卫
  */
 // 白名单页面
-const whiteList = ['/login', '/404', '/401'];
+const whiteList = ['/login', '/404', '/403'];
 // 动态路由缓存
 const removeRouteFns: FunctionType[] = [];
 // 移除所有动态路由
@@ -86,7 +86,7 @@ router.beforeEach((to, _from, next) => {
       const permissions = permissionStore.keys;
       // 没有权限
       if (!permissions.length) {
-        next({ name: '401' });
+        next({ name: '403' });
       }
       // 有权限
       else {

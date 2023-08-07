@@ -3,5 +3,5 @@ import Exception from '@/components/Exception/index.vue';
 </script>
 
 <template>
-  <Exception status="404" desc="跳转页面失败" />
+  <Exception status="403" desc="暂无相关权限" />
 </template>
