@@ -24,8 +24,12 @@ const service: AxiosInstance = axios.create({
 /**
  * loading处理
  */
+interface Loading {
+  setText: (msg: string) => void;
+  close: () => void;
+}
 interface LoadingUtil {
-  loadingInstance: null | ReturnType<typeof createLoadingInstance>;
+  loadingInstance: null | Loading;
   show: (msg: string) => void;
   close: () => void;
 }
@@ -149,7 +153,6 @@ service.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 // 定义接口返回结构
 interface ResponseData<T> extends ObjectType {
   code: number | string;
