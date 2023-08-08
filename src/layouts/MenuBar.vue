@@ -57,8 +57,8 @@ function toggleFullScreen() {
         <el-icon><RefreshRight /></el-icon>
       </div>
     </div>
-    <div class="flex items-center" @click="toggleFullScreen" title="切换全屏">
-      <div class="menubar-icon mr-3">
+    <div class="flex items-center">
+      <div class="menubar-icon mr-3" @click="toggleFullScreen" title="切换全屏">
         <el-icon><FullScreen /></el-icon>
       </div>
       <el-dropdown @command="handleCommand">
