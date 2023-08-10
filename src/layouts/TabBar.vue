@@ -6,7 +6,7 @@ import {
   useRouter,
 } from 'vue-router';
 import { CloseTarget, TabItem, useStateStore } from '@/store/state';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -60,20 +60,38 @@ function addTab(r: RouteLocationNormalizedLoaded) {
     title: r.meta?.title as string,
     keepAlive: (r.meta?.keepAlive ?? false) as boolean,
   });
+  // 滚动
+  setTimeout(fixPosition, 50);
 }
 addTab(route);
 onBeforeRouteUpdate(function (to) {
   addTab(to);
 });
+
+/**
+ * 滚动定位
+ */
+const tabbarWrapperRef = ref<HTMLElement | null>(null);
+function fixPosition() {
+  if (!tabbarWrapperRef.value) return;
+  const activeItem =
+    tabbarWrapperRef.value.querySelector<HTMLElement>('.active');
+  if (!activeItem) return;
+  const activeTabRect = activeItem.getBoundingClientRect();
+  const tabBarRect = tabbarWrapperRef.value.getBoundingClientRect();
+  const tabOffset = activeItem.offsetLeft - tabbarWrapperRef.value.offsetLeft;
+  const scrollLeft = tabOffset - (tabBarRect.width - activeTabRect.width) / 2;
+  tabbarWrapperRef.value.scroll({ left: scrollLeft, behavior: 'smooth' });
+}
 </script>
 
 <template>
   <div class="px-2 h-10 flex justify-between items-center bg-white shadow-md">
-    <div class="flex-1 flex items-center">
+    <div class="flex-1 flex items-center min-w-0">
       <div class="tabbar-icon" @click="goPrev">
         <el-icon><DArrowLeft /></el-icon>
       </div>
-      <div class="overflow-x-auto flex items-center">
+      <div ref="tabbarWrapperRef" class="tabbar-wrapper">
         <div
           v-for="tab of stateStore.tabs"
           :key="tab.path"
@@ -122,8 +140,14 @@ onBeforeRouteUpdate(function (to) {
     color: var(--primary-color);
   }
 }
+.tabbar-wrapper {
+  @apply overflow-x-auto flex-1 flex items-center min-w-0;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 .tabbar-item {
-  @apply h-9 px-2 ml-1 flex items-center justify-center text-sm rounded-t-lg cursor-pointer text-gray-600 border border-gray-100;
+  @apply h-9 px-2 ml-1 flex-none flex items-center justify-center text-sm rounded-t-lg cursor-pointer text-gray-600 border border-gray-100;
   .icon {
     @apply rounded-full ml-1;
     &:hover {
