@@ -6,6 +6,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { usePermissionStore } from '@/store/permission';
 import { useStateStore } from '@/store/state';
+import { removeAddRoutes } from '@/router/routes';
 
 const router = useRouter();
 const route = useRoute();
@@ -50,6 +51,8 @@ function handleLogin(resp: any) {
   // 清空tab
   const stateStore = useStateStore();
   stateStore.tabs = [];
+  // 清空路由
+  removeAddRoutes();
   setTimeout(() => {
     const { from } = route.query;
     router.push({ path: (from as string) ?? '/', replace: true });

@@ -5,6 +5,7 @@ import { createWebHistory } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { usePermissionStore } from '@/store/permission';
 import setting from './setting';
+import { addRemoveRouteFn, removeAddRoutes } from './routes';
 
 const Login = () => import('@/views/auth/login.vue');
 const Forbidden = () => import('@/views/exception/403.vue');
@@ -47,17 +48,7 @@ const router = createRouter({
  * 路由全局解析守卫
  */
 // 白名单页面
-const whiteList = ['/login', '/404', '/403'];
-// 动态路由缓存
-const removeRouteFns: FunctionType[] = [];
-// 移除所有动态路由
-function removeAllAddRoutes() {
-  for (;;) {
-    const fn = removeRouteFns.shift();
-    if (!fn) return;
-    fn();
-  }
-}
+const whiteList = ['/login', '/403'];
 // 配置进度条
 NProgress.configure({ showSpinner: false });
 // 路由全局解析守卫
@@ -79,7 +70,7 @@ router.beforeEach((to, _from, next) => {
       // 没生成菜单
       if (!permissionStore.hasGenerateRoutes) {
         // 删除之前路由
-        removeAllAddRoutes();
+        removeAddRoutes();
         const addRoutes = permissionStore.generateRoutes();
         const firstRoute = permissionStore.firstRoute;
         const homeRoute: RouteRecordRaw = {
@@ -89,19 +80,19 @@ router.beforeEach((to, _from, next) => {
           redirect: firstRoute,
           children: [...addRoutes],
         };
-        const rmHome = router.addRoute(homeRoute);
-        removeRouteFns.push(rmHome);
+        addRemoveRouteFn(router.addRoute(homeRoute));
         // 最后添加404页面
-        const rm404 = router.addRoute({
-          path: '/:pathMatch(.*)*',
-          name: 'NotFound',
-          meta: {
-            title: '找不到页面',
-            hidden: true,
-          },
-          component: NotFound,
-        });
-        removeRouteFns.push(rm404);
+        addRemoveRouteFn(
+          router.addRoute({
+            path: '/:pathMatch(.*)*',
+            name: 'NotFound',
+            meta: {
+              title: '找不到页面',
+              hidden: true,
+            },
+            component: NotFound,
+          })
+        );
         // 如果没有可访问路由就跳转403
         if (!firstRoute) {
           next({ name: '403', replace: true });
