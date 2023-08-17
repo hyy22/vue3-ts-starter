@@ -10,7 +10,6 @@ const Login = () => import('@/views/auth/login.vue');
 const Forbidden = () => import('@/views/exception/403.vue');
 const NotFound = () => import('@/views/exception/404.vue');
 const Layout = () => import('@/layouts/index.vue');
-const Landing = () => import('@/views/landing.vue');
 /**
  * 静态路由
  */
@@ -26,12 +25,6 @@ const staticRoutes: RouteRecordRaw[] = [
     name: '403',
     component: Forbidden,
     meta: { title: '没有权限', hidden: true },
-  },
-  {
-    path: '/landing',
-    name: 'Landing',
-    component: Landing,
-    meta: { title: '加载中', hidden: true },
   },
 ];
 /**
@@ -83,45 +76,46 @@ router.beforeEach((to, _from, next) => {
     const permissionStore = usePermissionStore();
     // 已登录
     if (userStore.token) {
-      const permissions = permissionStore.keys;
-      // 没有权限
-      if (!permissions.length) {
-        next({ name: '403' });
-      }
-      // 有权限
-      else {
-        // 没生成菜单
-        if (!permissionStore.addRoutes.length) {
-          // 删除之前路由
-          removeAllAddRoutes();
-          const addRoutes = permissionStore.generateRoutes();
-          const homeRoute: RouteRecordRaw = {
-            path: '/',
-            name: 'Home',
-            component: Layout,
-            redirect: '/landing',
-            children: [...addRoutes],
-          };
-          const rmHome = router.addRoute(homeRoute);
-          removeRouteFns.push(rmHome);
-          // 最后添加404页面
-          const rm404 = router.addRoute({
-            path: '/:pathMatch(.*)*',
-            name: 'NotFound',
-            meta: {
-              title: '找不到页面',
-              hidden: true,
-            },
-            component: NotFound,
-          });
-          removeRouteFns.push(rm404);
-          // addRoute后需要手动触发一次
+      // 没生成菜单
+      if (!permissionStore.hasGenerateRoutes) {
+        // 删除之前路由
+        removeAllAddRoutes();
+        const addRoutes = permissionStore.generateRoutes();
+        const firstRoute = permissionStore.firstRoute;
+        const homeRoute: RouteRecordRaw = {
+          path: '/',
+          name: 'Home',
+          component: Layout,
+          redirect: firstRoute,
+          children: [...addRoutes],
+        };
+        const rmHome = router.addRoute(homeRoute);
+        removeRouteFns.push(rmHome);
+        // 最后添加404页面
+        const rm404 = router.addRoute({
+          path: '/:pathMatch(.*)*',
+          name: 'NotFound',
+          meta: {
+            title: '找不到页面',
+            hidden: true,
+          },
+          component: NotFound,
+        });
+        removeRouteFns.push(rm404);
+        // 如果没有可访问路由就跳转403
+        if (!firstRoute) {
+          next({ name: '403', replace: true });
+        }
+        // 否则就直接放行
+        else {
           next({ ...to, replace: true });
         }
-        // 已生成过菜单
-        else {
-          next();
-        }
+        // 更新路由添加状态
+        permissionStore.hasGenerateRoutes = true;
+      }
+      // 已生成过菜单
+      else {
+        next();
       }
     }
     // 未登录

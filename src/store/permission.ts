@@ -5,14 +5,22 @@ import { dynamicRoutes } from '@/router';
 interface PermissionStore {
   keys: string[];
   addRoutes: RouteRecordRaw[];
+  hasGenerateRoutes: boolean;
 }
 export const usePermissionStore = defineStore('permission', {
   state: (): PermissionStore => ({
     keys: [], // 权限列表
-    addRoutes: [], // 动态路由
+    addRoutes: [], // 动态路由，可用来渲染菜单
+    hasGenerateRoutes: false, // 是否已经生成路由，解决路由跳转无限循环
   }),
   persist: {
     paths: ['keys'],
+  },
+  getters: {
+    // 第一个可访问路由
+    firstRoute: state => {
+      return getFirstRoute(dynamicRoutes, state.keys);
+    },
   },
   actions: {
     hasPermission(k: string) {
@@ -21,15 +29,12 @@ export const usePermissionStore = defineStore('permission', {
     setPermission(val: string[]) {
       this.keys = val;
       // 每次权限变更都重新渲染菜单
-      this.addRoutes = [];
+      this.hasGenerateRoutes = false;
     },
     generateRoutes() {
       const addRoutes = filterAccessRoutes(dynamicRoutes, this.keys);
       this.addRoutes = addRoutes;
       return addRoutes;
-    },
-    getFirstRoute() {
-      return getFirstRoute(dynamicRoutes, this.keys);
     },
   },
 });

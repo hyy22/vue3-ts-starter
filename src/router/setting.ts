@@ -29,6 +29,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '菜单管理',
           icon: 'Memo',
+          permission: '1',
         },
       },
     ],
