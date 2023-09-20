@@ -1,33 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useUserStore } from '@/store/user';
 import { useStateStore } from '@/store/state';
-import UpdatePsw from '@/components/Auth/UpdatePsw.vue';
-import useAuth from '@/components/Auth/useAuth';
+import UserNav from './UserNav/index.vue';
 
-const userStore = useUserStore();
 const stateStore = useStateStore();
-/**
- * 下拉操作
- */
-const updatePswRef = ref<InstanceType<typeof UpdatePsw> | null>(null);
-function showUpdatePasswordModal() {
-  if (!updatePswRef.value) return;
-  updatePswRef.value.show();
-}
-const { logout } = useAuth();
-function handleCommand(name: 'UPDATE_PASSWORD' | 'LOGOUT') {
-  switch (name) {
-    case 'UPDATE_PASSWORD':
-      showUpdatePasswordModal();
-      break;
-    case 'LOGOUT':
-      logout();
-      break;
-    default:
-  }
-}
-
 /**
  * 按钮操作
  */
@@ -61,30 +36,9 @@ function toggleFullScreen() {
       <div class="menubar-icon mr-3" @click="toggleFullScreen" title="切换全屏">
         <el-icon><FullScreen /></el-icon>
       </div>
-      <el-dropdown @command="handleCommand">
-        <div
-          class="flex p-1 rounded-md text-white"
-          style="background: var(--primary-color)">
-          <span>{{ userStore.userInfo?.nickname }}</span>
-          <el-icon class="el-icon--right">
-            <ArrowDown />
-          </el-icon>
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="UPDATE_PASSWORD"
-              >修改密码</el-dropdown-item
-            >
-            <el-dropdown-item divided command="LOGOUT"
-              >退出登录</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <UserNav />
     </div>
   </div>
-  <!-- 修改密码弹窗 -->
-  <UpdatePsw ref="updatePswRef" />
 </template>
 
 <style scoped>
