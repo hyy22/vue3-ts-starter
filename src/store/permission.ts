@@ -19,7 +19,7 @@ export const usePermissionStore = defineStore('permission', {
   getters: {
     // 第一个可访问路由
     firstRoute: state => {
-      return getFirstRoute(dynamicRoutes, state.keys);
+      return getFirstRoute(state.addRoutes);
     },
   },
   actions: {
@@ -63,20 +63,12 @@ function filterAccessRoutes(
 }
 
 // 获取动态路由第一项
-function getFirstRoute(
-  routes: RouteRecordRaw[],
-  permissions: string[]
-): RouteRecordRaw | undefined {
+function getFirstRoute(routes: RouteRecordRaw[]): RouteRecordRaw | undefined {
   for (const route of routes) {
     if (!route.children) {
-      if (
-        !route?.meta?.permission ||
-        permissions.includes(route.meta.permission as string)
-      ) {
-        return route;
-      }
+      return route;
     } else {
-      const result = getFirstRoute(route.children, permissions);
+      const result = getFirstRoute(route.children);
       if (result) return result;
     }
   }
