@@ -65,6 +65,7 @@ function filterAccessRoutes(
 // 获取动态路由第一项
 function getFirstRoute(routes: RouteRecordRaw[]): RouteRecordRaw | undefined {
   for (const route of routes) {
+    if (route.meta?.hidden) continue;
     if (!route.children) {
       return route;
     } else {
