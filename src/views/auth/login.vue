@@ -116,4 +116,3 @@ function showToast(msg: string) {
   @apply underline mt-4 text-gray-500 text-right cursor-pointer text-sm;
 }
 </style>
-@/api/auth
