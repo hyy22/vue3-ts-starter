@@ -153,8 +153,8 @@ service.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// 定义接口返回结构
-interface ResponseData<T> extends ObjectType {
+// TODO:定义接口返回结构
+export interface ResponseData<T> extends ObjectType {
   code: number | string;
   msg: string;
   data: T;
