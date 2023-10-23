@@ -17,6 +17,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "esModuleInterop": true, // 支持default导入
+    "allowSyntheticDefaultImports": true, // 允许从没有设置默认导出的模块中默认导入
 
     /* Linting */
     "strict": true,
