@@ -5,7 +5,7 @@ import { handleBlobResponse } from '@/api';
 
 export interface FormatResp<T> {
   list: T[];
-  total: number;
+  total?: number;
 }
 export default function useFormSearch<
   T extends ObjectType = any,
