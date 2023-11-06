@@ -1,17 +1,17 @@
 export default {
   // 查询
-  get(k: string) {
+  get<T = string>(k: string): T {
     let value = localStorage.getItem(k);
     try {
-      value = JSON.parse(value as string);
+      value = JSON.parse(value!);
     } catch (e) {
       /* empty */
     }
-    return value;
+    return value as T;
   },
   // 设置
   set(k: string, v: any) {
-    localStorage.setItem(k, v);
+    localStorage.setItem(k, JSON.stringify(v));
   },
   // 删除
   remove(k: string) {
