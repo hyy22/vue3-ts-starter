@@ -1,23 +1,30 @@
 // import request from './http';
+import { ResponseData } from './http';
 
 // 用户密码登录
 interface FetchLoginByAccountParams {
   username: string;
   password: string;
 }
+export interface FetchLoginByAccountResponse {
+  token: string;
+  userInfo: {
+    id: number;
+    nickname: string;
+  };
+}
 export function fetchLoginByAccount(params: FetchLoginByAccountParams) {
   console.log('params', params);
-  return Promise.resolve({
+  return Promise.resolve<ResponseData<FetchLoginByAccountResponse>>({
     code: 200,
     data: {
       token: '123',
       userInfo: {
         id: 1,
         nickname: 'admin',
-        user: 'test',
       },
     },
-    message: '',
+    msg: 'success',
   });
   // return request({ url: '/auth/login', method: 'POST', params, loading: true });
 }

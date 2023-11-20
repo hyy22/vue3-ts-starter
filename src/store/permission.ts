@@ -23,7 +23,10 @@ export const usePermissionStore = defineStore('permission', {
     },
   },
   actions: {
-    hasPermission(k: string) {
+    // 判断是否有权限，支持数组
+    hasPermission(k: string | string[]) {
+      // 如果是数组，需要满足同时存在
+      if (Array.isArray(k)) return k.every(item => this.keys.includes(item));
       return this.keys.includes(k);
     },
     setPermission(val: string[]) {

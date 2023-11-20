@@ -7,15 +7,12 @@ import { useUserStore } from '@/store/user';
 import { usePermissionStore } from '@/store/permission';
 import { useStateStore } from '@/store/state';
 import { removeAddRoutes } from '@/router/routes';
+import { handleResp } from '@/api';
 
 const router = useRouter();
 const route = useRoute();
 // 账户密码登录
-interface LoginForm {
-  account: string;
-  password: string;
-}
-const loginForm: LoginForm = reactive({
+const loginForm = reactive({
   account: '',
   password: '',
 });
@@ -36,27 +33,30 @@ async function handleAccountLogin() {
   });
   handleLogin(resp);
 }
-// 登录成功
-function handleLogin(resp: any) {
-  if (resp.code !== 200) return showToast(resp.msg);
-  showToast('登录成功！');
-  const { token, userInfo } = resp.data;
-  // 设置token
-  const userStore = useUserStore();
-  userStore.setToken(token);
-  userStore.setUserInfo(userInfo);
-  // TODO:设置权限
-  const permissionStore = usePermissionStore();
-  permissionStore.keys = ['1'];
-  // 清空tab
-  const stateStore = useStateStore();
-  stateStore.tabs = [];
-  // 清空路由
-  removeAddRoutes();
-  setTimeout(() => {
-    const { from } = route.query;
-    router.push({ path: (from as string) ?? '/', replace: true });
-  }, 1000);
+// 可能有多种登录方式，统一处理
+type LoginResponse = Awaited<ReturnType<typeof fetchLoginByAccount>>;
+function handleLogin(resp: LoginResponse) {
+  handleResp(resp, data => {
+    showToast('登录成功！');
+    const { token, userInfo } = data;
+    // 设置token
+    const userStore = useUserStore();
+    userStore.setToken(token);
+    userStore.setUserInfo(userInfo);
+    // TODO:设置权限
+    const permissionStore = usePermissionStore();
+    permissionStore.keys = ['1'];
+    // 清空tab
+    const stateStore = useStateStore();
+    stateStore.tabs = [];
+    // 清空路由
+    permissionStore.hasGenerateRoutes = false;
+    removeAddRoutes();
+    setTimeout(() => {
+      const { from } = route.query;
+      router.push({ path: (from as string) ?? '/', replace: true });
+    }, 1000);
+  });
 }
 // 消息提示
 function showToast(msg: string) {
