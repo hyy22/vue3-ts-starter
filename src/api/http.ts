@@ -6,6 +6,8 @@ import axios, {
 } from 'axios';
 import { useUserStore } from '@/store/user';
 import useLoading from '@/components/Loading/useLoading';
+import useToast from '@/components/Toast/useToast';
+import { debounce } from '@/utils/tool';
 
 export interface AxiosRequestConfigExtra {
   // 是否显示loading
@@ -120,6 +122,7 @@ service.interceptors.request.use(
   }
 );
 
+const debounceToast = debounce(useToast, 500);
 /**
  * 响应拦截
  */
@@ -150,6 +153,7 @@ service.interceptors.response.use(
           break;
       }
     }
+    debounceToast('网络请求失败，请稍后重试');
     return Promise.reject(error);
   }
 );
