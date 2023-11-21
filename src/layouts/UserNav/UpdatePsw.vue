@@ -3,6 +3,7 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { nextTick, reactive, ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import { fetchUpdatePassword } from '@/api/auth';
+import { handleResp } from '@/api';
 
 const updatePasswordModalData = () => ({
   visible: false,
@@ -47,13 +48,14 @@ function submitUpdatePasswordModal() {
       oldPassword: oldPsw,
       newPassword: newPsw,
     });
-    if (resp.code !== 200) return ElMessage.error(resp.message);
-    // 修改成功后，重新登录
-    ElMessage.success('密码修改成功，请重新登录～');
-    setTimeout(() => {
-      const userStore = useUserStore();
-      userStore.logout();
-    }, 1000);
+    handleResp(resp, () => {
+      // 修改成功后，重新登录
+      ElMessage.success('密码修改成功，请重新登录～');
+      setTimeout(() => {
+        const userStore = useUserStore();
+        userStore.logout();
+      }, 1000);
+    });
   });
 }
 defineExpose({

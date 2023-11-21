@@ -36,9 +36,9 @@ interface FetchUpdatePasswordParams {
 }
 export function fetchUpdatePassword(params: FetchUpdatePasswordParams) {
   console.log('params', params);
-  return Promise.resolve({
+  return Promise.resolve<ResponseData<any>>({
     code: 200,
     data: {},
-    message: '',
+    msg: '',
   });
 }
