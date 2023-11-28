@@ -1,8 +1,8 @@
-export interface TreeItem extends ObjectType {
+export type TreeItem<T extends ObjectType = ObjectType> = T & {
   id: number | string;
   label: number | string;
-  children?: TreeItem[];
-}
+  children?: TreeItem<T>[];
+};
 type TreeItemWithoutChildren = Omit<TreeItem, 'children'>;
 export function tree2List(
   tree: TreeItem[],
@@ -21,7 +21,6 @@ export function tree2List(
   });
   return result;
 }
-
 // 排除对象属性
 function excludeProperty<T, K extends keyof T>(obj: T, prop: K): Omit<T, K> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,16 +34,16 @@ function excludeProperty<T, K extends keyof T>(obj: T, prop: K): Omit<T, K> {
  * @param options 配置
  * @returns
  */
-interface List2TreeOptions {
-  value?: (row: ObjectType) => string | number; // value获取方法
-  label?: (row: ObjectType) => string | number; // label获取方法
-  parentValue?: (row: ObjectType) => string | number; // 父值获取方法
+interface List2TreeOptions<T> {
+  value?: (row: T) => string | number; // value获取方法
+  label?: (row: T) => string | number; // label获取方法
+  parentValue?: (row: T) => string | number; // 父值获取方法
   rootValue?: string | number; // 根值
 }
-export function list2Tree(
-  list: ObjectType[],
-  options: List2TreeOptions = {}
-): TreeItem[] {
+export function list2Tree<T extends ObjectType = ObjectType>(
+  list: T[],
+  options: List2TreeOptions<T> = {}
+): TreeItem<T>[] {
   // 默认取值方式
   const {
     value = r => r.id,
@@ -67,7 +66,7 @@ export function list2Tree(
     const parentItem = map.get(pidVal);
     if (parentItem) {
       // 添加标识 _isLeaf
-      item.__isLeaf__ = true;
+      Object.assign(item, { __isLeaf__: true });
       // 添加到children
       parentItem.children
         ? parentItem.children.push(item)
@@ -80,22 +79,22 @@ export function list2Tree(
     const hasRootValue = typeof rootValue !== 'undefined' && rootValue !== null;
     const idVal = value(v);
     return hasRootValue ? idVal === rootValue : !v.__isLeaf__;
-  }) as TreeItem[];
+  }) as TreeItem<T>[];
 }
 
 /**
  * list转tree，支持层级设置
  */
-interface ListToTreeOptions {
+interface ListToTreeOptions<T> {
   parentId: any;
   maxDepth?: number; // 最大递归层数
   depth?: number; // 当前层数
-  getLabel?: (row: ObjectType) => string; // 获取label方法
-  getValue?: (row: ObjectType) => any; // 获取value方法
-  getParentValue?: (row: ObjectType) => any; // 获取父级value方法
+  getLabel?: (row: T) => string; // 获取label方法
+  getValue?: (row: T) => any; // 获取value方法
+  getParentValue?: (row: T) => any; // 获取父级value方法
 }
-export function listToTree(
-  list: any[],
+export function listToTree<T extends ObjectType = ObjectType>(
+  list: T[],
   {
     parentId,
     maxDepth = Infinity,
@@ -103,8 +102,8 @@ export function listToTree(
     getLabel = row => row.label,
     getValue = row => row.id,
     getParentValue = row => row.parentId,
-  }: ListToTreeOptions
-): TreeItem[] {
+  }: ListToTreeOptions<T>
+): TreeItem<T>[] {
   const tree: TreeItem[] = [];
   for (const item of list) {
     if (getParentValue(item) === parentId) {
@@ -127,5 +126,5 @@ export function listToTree(
       tree.push(node);
     }
   }
-  return tree;
+  return tree as TreeItem<T>[];
 }
