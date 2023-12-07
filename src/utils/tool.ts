@@ -4,9 +4,9 @@
  * @param o
  * @returns
  */
-export function deepCopy(o: any): any {
+export function deepCopy<T = any>(o: T): T {
   if (typeof o === 'object') {
-    const result: ObjectType = Array.isArray(o) ? [] : {};
+    const result = (Array.isArray(o) ? [] : {}) as T;
     for (const key in o) {
       if (Object.hasOwn(o, key)) {
         result[key] = deepCopy(o[key]);
