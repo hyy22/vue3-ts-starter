@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import {
-  RouteLocationNormalizedLoaded,
-  onBeforeRouteUpdate,
+  type RouteLocationNormalizedLoaded,
   useRoute,
   useRouter,
 } from 'vue-router';
 import { CloseTarget, TabItem, useStateStore } from '@/store/state';
-import { computed, ref } from 'vue';
+import { computed, ref, watch, onBeforeUnmount } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -52,7 +51,9 @@ function handleCommand(name: CloseTarget) {
   // 如果没有路由需要跳转首页
   if (!stateStore.tabs.length) router.push('/');
 }
-// 打开标签
+/**
+ * 打开标签
+ */
 function addTab(r: RouteLocationNormalizedLoaded) {
   stateStore.addTab({
     name: r.name as string,
@@ -63,14 +64,7 @@ function addTab(r: RouteLocationNormalizedLoaded) {
   // 滚动
   setTimeout(fixPosition, 50);
 }
-addTab(route);
-onBeforeRouteUpdate(function (to) {
-  addTab(to);
-});
-
-/**
- * 滚动定位
- */
+// 滚动定位
 const tabbarWrapperRef = ref<HTMLElement | null>(null);
 function fixPosition() {
   if (!tabbarWrapperRef.value) return;
@@ -83,6 +77,13 @@ function fixPosition() {
   const scrollLeft = tabOffset - (tabBarRect.width - activeTabRect.width) / 2;
   tabbarWrapperRef.value.scroll({ left: scrollLeft, behavior: 'smooth' });
 }
+/**
+ * 检测路由变化，更新tabbar
+ */
+const stopWatch = watch(route, addTab, { immediate: true });
+onBeforeUnmount(() => {
+  stopWatch();
+});
 </script>
 
 <template>
