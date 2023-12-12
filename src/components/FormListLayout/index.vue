@@ -7,6 +7,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const emit = defineEmits<{
   (e: 'page-change', val: PageType): void;
+  (e: 'update:page', val: PageType | boolean): void;
 }>();
 
 /**
@@ -20,6 +21,7 @@ function onPageSizeChange(e: number) {
 }
 function onPageChange(p: Partial<PageType>) {
   const page = Object.assign({}, props.page as PageType, p);
+  emit('update:page', page);
   emit('page-change', page);
 }
 </script>
