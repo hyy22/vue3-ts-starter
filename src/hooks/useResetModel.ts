@@ -6,7 +6,7 @@ import { reactive } from 'vue';
  * @returns
  */
 export default function useResetModel<T extends ObjectType>(factory: () => T) {
-  const model = reactive(factory());
+  const model = reactive(factory()) as T;
   function resetModel() {
     Object.assign(model, factory());
   }
