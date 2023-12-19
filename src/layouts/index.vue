@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
 import { useStateStore } from '@/store/state';
 import SideBar from './SideBar.vue';
 import MenuBar from './MenuBar.vue';
 import TabBar from './TabBar.vue';
 
-const route = useRoute();
 const stateStore = useStateStore();
 </script>
 
@@ -20,7 +18,7 @@ const stateStore = useStateStore();
       <TabBar />
       <!-- 内容 -->
       <div class="flex-1 m-2 bg-white rounded overflow-y-auto">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component, route }">
           <keep-alive :include="stateStore.keepAliveTabs">
             <component :is="Component" :key="route.fullPath"></component>
           </keep-alive>
