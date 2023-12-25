@@ -1,5 +1,5 @@
 # build
-FROM node:16.18.1-slim
+FROM node:18.18.2-slim
 WORKDIR /web
 COPY . .
 RUN npm install --registry=https://registry.npm.taobao.org && npm run build
