@@ -1,5 +1,8 @@
-import { RouteRecordRaw, createRouter } from 'vue-router';
-import { createWebHistory } from 'vue-router';
+import {
+  type RouteRecordRaw,
+  createRouter,
+  createWebHistory,
+} from 'vue-router';
 
 /**
  * TODO:静态路由

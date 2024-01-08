@@ -1,13 +1,19 @@
 import { defineStore } from 'pinia';
 
 interface UserInfo extends ObjectType {
-  // 假设有个id
+  // 用户id
   id: number;
+  // 用户昵称
+  nickname: string;
+}
+interface UserStore {
+  token: string;
+  userInfo: UserInfo | null;
 }
 export const useUserStore = defineStore('user', {
-  state: () => ({
+  state: (): UserStore => ({
     token: '',
-    userInfo: null as UserInfo | null,
+    userInfo: null,
   }),
   actions: {
     setToken(tk: string) {
