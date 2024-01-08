@@ -1,7 +1,10 @@
 import * as NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import { RouteRecordRaw, createRouter } from 'vue-router';
-import { createWebHistory } from 'vue-router';
+import {
+  type RouteRecordRaw,
+  createRouter,
+  createWebHistory,
+} from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { usePermissionStore } from '@/store/permission';
 import setting from './setting';
