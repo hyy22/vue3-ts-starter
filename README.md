@@ -1,6 +1,6 @@
 # 基础脚手架
 
-一个基于vue3的初始化模版项目，可结合[https://github.com/hyy22/ksbl-cli](https://github.com/hyy22/ksbl-cli)工具使用。根据分支集成不同ui库模版，目前已集成element-plus后台管理模版
+一个基于vue3的初始化模版项目，可结合[https://github.com/hyy22/ksbl-cli](https://github.com/hyy22/ksbl-cli)工具使用。根据分支集成不同ui库模版，目前已集成[element-plus后台管理模版](https://github.com/hyy22/vue3-ts-starter/tree/element-plus)、[vantUI模版](https://github.com/hyy22/vue3-ts-starter/tree/vant)
 
 ## 功能
 
@@ -16,7 +16,9 @@
 - [x] axios封装http操作
 - [x] 一些公共方法&类型
 - [x] fontawesome图标
-- [x] 内置组件 Toast & Loading
+- [x] iconfont脚本
+- [x] 权限控制
+- [x] 内置组件
 
 ## 使用
 
@@ -33,7 +35,7 @@ yarn build # npm run build
 yarn preview # npm run preview
 ```
 
-## 结合ci工具使用
+## 结合cli工具使用
 
 ```bash
 # 安装
