@@ -45,3 +45,9 @@ ksbl-cli template set vue3-ts-template git@github.com:hyy22/vue3-ts-starter.git#
 # 初始化项目 可以使用-I选项初始化git -i安装依赖 -m修改包管理工具，默认npm
 ksbl-cli create -t vue3-ts-template xxx-web
 ```
+
+## 截图
+
+![image](./screenshots/1.png)
+![image](./screenshots/2.png)
+![image](./screenshots/3.png)
