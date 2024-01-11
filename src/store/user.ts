@@ -8,12 +8,12 @@ interface UserInfo extends ObjectType {
 }
 interface UserStore {
   token: string;
-  userInfo: UserInfo | null;
+  userInfo?: UserInfo;
 }
 export const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     token: '',
-    userInfo: null,
+    userInfo: undefined,
   }),
   actions: {
     setToken(tk: string) {
@@ -26,15 +26,23 @@ export const useUserStore = defineStore('user', {
       this.userInfo = userInfo;
     },
     removeUserInfo() {
-      this.userInfo = null;
+      this.userInfo = undefined;
     },
-    logout() {
+    // 集合操作-登录
+    login(loginInfo: { token: string; userInfo: UserInfo }) {
+      this.setToken(loginInfo.token);
+      this.setUserInfo(loginInfo.userInfo);
+    },
+    // 集合操作-注销登录
+    logout(route = true) {
       this.removeToken();
       this.removeUserInfo();
-      location.replace('/login');
+      if (route) {
+        // 获取当前页面url
+        const path = window.location.href.match(/(\/[^/]+)$/)?.[1] ?? '/';
+        location.replace(`/login?from=${encodeURIComponent(path)}`);
+      }
     },
   },
-  persist: {
-    paths: ['token', 'userInfo'],
-  },
+  persist: true,
 });

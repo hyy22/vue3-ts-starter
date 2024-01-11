@@ -4,9 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--primary-color)',
+        primary: 'var(--theme-primary-color)',
       },
     },
   },
   plugins: [],
+  corePlugins: {
+    preflight: false,
+  },
 };

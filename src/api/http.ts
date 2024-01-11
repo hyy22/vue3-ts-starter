@@ -5,7 +5,8 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { useUserStore } from '@/store/user';
-import useLoading from '@/components/Loading/useLoading';
+import { showToast, showLoadingToast } from 'vant';
+import { debounce } from '@/utils/tool';
 
 export interface AxiosRequestConfigExtra {
   // 是否显示loading
@@ -19,7 +20,7 @@ let loadingCount = 0; // 需要loading的请求个数
 const requestQueueMap = new Map(); // 请求map队列
 const service: AxiosInstance = axios.create({
   timeout: import.meta.env.VITE_API_TIME_OUT, // 超时时长
-  baseURL: import.meta.env.VITE_API_BASE_URL, // 请求地址
+  baseURL: import.meta.env.BASE_URL, // 请求地址
 });
 /**
  * loading处理
@@ -34,8 +35,19 @@ interface LoadingUtil {
   close: () => void;
 }
 // 创建loading实例
-function createLoadingInstance(msg: string) {
-  return useLoading({ text: msg });
+function createLoadingInstance(msg: string): Loading {
+  const loadingInstance = showLoadingToast({
+    forbidClick: true,
+    message: msg,
+  });
+  return {
+    setText: (msg: string) => {
+      loadingInstance.message = msg;
+    },
+    close: () => {
+      loadingInstance.close();
+    },
+  };
 }
 const loadingUtil: LoadingUtil = {
   loadingInstance: null,
@@ -119,7 +131,24 @@ service.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+/**
+ * 添加公共参数
+ */
+// function addCommonParams(config: AxiosRequestConfig, params: ObjectType) {
+//   if (config.method?.toUpperCase() === 'GET') {
+//     config.params = { ...params, ...config.params };
+//   } else if (config.data instanceof FormData) {
+//     for (const key in params) {
+//       if (!config.data.has(key)) {
+//         config.data.append(key, params[key]);
+//       }
+//     }
+//   } else {
+//     config.data = { ...params, ...config.data };
+//   }
+// }
 
+const debounceToast = debounce(showToast, 500);
 /**
  * 响应拦截
  */
@@ -150,12 +179,13 @@ service.interceptors.response.use(
           break;
       }
     }
+    debounceToast('网络请求失败，请稍后重试');
     return Promise.reject(error);
   }
 );
-// TODO:定义接口返回结构
+// 定义接口返回结构
 export interface ResponseData<T> extends ObjectType {
-  code: number | string;
+  code: number;
   msg: string;
   data: T;
 }

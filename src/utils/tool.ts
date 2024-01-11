@@ -108,3 +108,11 @@ export function pickNumberFromString(
   }
   return result;
 }
+
+/**
+ * 计算响应尺寸
+ * px -> vw
+ */
+export function calcResponseSize(size: number) {
+  return `${(size / 750) * 100}vw`;
+}
