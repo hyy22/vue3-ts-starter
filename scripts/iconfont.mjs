@@ -3,7 +3,6 @@
  * 根据提供的css url下载样式及字体文件
  * 添加到package.json => npm pkg set scripts.iconfont="node scripts/iconfont.mjs"
  * yarn iconfont xxxurl
- * 在main.ts中导入iconfont.css
  * tips: 为了让iconfont和ui框架（如vant）更好契合，请统一字体和图标类名
  */
 import axios from 'axios';
@@ -13,6 +12,7 @@ import {
   writeFileSync,
   existsSync,
   mkdirSync,
+  rmSync,
 } from 'fs';
 import { fileURLToPath } from 'url';
 import { resolve } from 'path';
@@ -21,7 +21,13 @@ import { resolve } from 'path';
 const ICONFONT_DIR = fileURLToPath(
   new URL('../src/assets/iconfont', import.meta.url)
 );
-if (!existsSync(ICONFONT_DIR)) {
+/**
+ * 重新创建文件夹
+ */
+function reCreateDir() {
+  if (existsSync(ICONFONT_DIR)) {
+    rmSync(ICONFONT_DIR, { recursive: true, force: true });
+  }
   mkdirSync(ICONFONT_DIR, { recursive: true });
 }
 /**
@@ -56,6 +62,12 @@ function matchText(text, regExp, replacer) {
 (async () => {
   // 获取链接
   const [cssUrl] = process.argv.slice(2);
+  if (!cssUrl || !/^(http:|https:)*\/\//.test(cssUrl)) {
+    console.log('请输入正确的css链接');
+    return;
+  }
+  // 清空文件夹
+  reCreateDir();
   // 下载css文件
   await downloadFile(cssUrl, 'iconfont.css');
   // 替换文本
