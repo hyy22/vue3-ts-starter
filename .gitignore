@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .eslintcache
+auto-imports.d.ts
 components.d.ts
 
 # Editor directories and files
