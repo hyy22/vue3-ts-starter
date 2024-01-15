@@ -5,7 +5,7 @@
  * @returns
  */
 export function deepCopy<T = any>(o: T): T {
-  if (typeof o === 'object') {
+  if (typeof o === 'object' && o !== null) {
     const result = (Array.isArray(o) ? [] : {}) as T;
     for (const key in o) {
       if (Object.hasOwn(o, key)) {
