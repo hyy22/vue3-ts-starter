@@ -101,7 +101,7 @@ const hasFooter = computed(() => !!slots.default!()[0].children?.length);
       <div class="el-transfer-panel__list is-filterable">
         <el-tree
           ref="treeRef"
-          :data="data"
+          :data="props.data"
           :default-checked-keys="props.defaultChecked"
           empty-text="暂无数据"
           show-checkbox
