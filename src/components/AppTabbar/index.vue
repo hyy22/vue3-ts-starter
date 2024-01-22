@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import tabbars from '@/config/tabbar';
+import { calcResponseSize } from '@/utils/tool';
 
 interface Props {
   // 当前tab
@@ -21,13 +22,14 @@ function onTabChange(active: string) {
     :model-value="props.current"
     safe-area-inset-bottom
     @change="onTabChange">
-    <van-tabbar-item
-      v-for="item of tabbars"
-      :key="item.name"
-      :name="item.name"
-      :icon="item.icon"
-      :icon-prefix="item.iconPrefix ?? 'van-icon'"
-      >{{ item.label }}</van-tabbar-item
-    >
+    <van-tabbar-item v-for="item of tabbars" :key="item.name" :name="item.name">
+      {{ item.label }}
+      <template #icon>
+        <van-icon
+          :name="item.icon"
+          :size="calcResponseSize(40)"
+          :class-prefix="item.iconPrefix ?? 'van-icon'"></van-icon>
+      </template>
+    </van-tabbar-item>
   </van-tabbar>
 </template>

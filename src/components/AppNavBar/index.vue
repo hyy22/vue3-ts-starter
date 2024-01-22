@@ -63,6 +63,8 @@ function goBack() {
         <slot name="right"></slot>
       </div>
     </div>
+    <!-- 底部插槽 -->
+    <slot name="footer"></slot>
   </div>
 </template>
 
