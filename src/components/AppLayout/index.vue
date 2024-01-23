@@ -5,6 +5,11 @@ import { camel2Line } from '@/utils/string';
 import { computed, ref } from 'vue';
 import useRect from '@/hooks/useRect';
 
+interface Props {
+  // 背景色
+  bgColor?: string;
+}
+const props = withDefaults(defineProps<Props>(), {});
 /**
  * 主题配置
  */
@@ -42,7 +47,10 @@ const footerRect = useRect(footerRef);
     theme-vars-scope="global">
     <div
       class="relative min-h-screen"
-      :style="{ ...themeVars, background: 'var(--theme-bg-color)' }">
+      :style="{
+        ...themeVars,
+        background: props.bgColor ?? 'var(--theme-bg-color)',
+      }">
       <!-- 头部 -->
       <div v-if="$slots.header" class="sticky top-0 left-0 w-full">
         <slot name="header"></slot>
