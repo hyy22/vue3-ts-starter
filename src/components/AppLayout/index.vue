@@ -8,8 +8,12 @@ import useRect from '@/hooks/useRect';
 interface Props {
   // 背景色
   bgColor?: string;
+  // z-index
+  zIndex?: number;
 }
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {
+  zIndex: 9,
+});
 /**
  * 主题配置
  */
@@ -52,7 +56,10 @@ const footerRect = useRect(footerRef);
         background: props.bgColor ?? 'var(--theme-bg-color)',
       }">
       <!-- 头部 -->
-      <div v-if="$slots.header" class="sticky top-0 left-0 w-full">
+      <div
+        v-if="$slots.header"
+        class="sticky top-0 left-0 w-full"
+        :style="{ zIndex: props.zIndex }">
         <slot name="header"></slot>
       </div>
       <slot></slot>
@@ -60,7 +67,10 @@ const footerRect = useRect(footerRef);
       <template v-if="$slots.footer">
         <!-- 占位 -->
         <div :style="{ height: footerRect?.height + 'px' }"></div>
-        <div ref="footerRef" class="fixed w-full bottom-0 left-0">
+        <div
+          ref="footerRef"
+          class="fixed w-full bottom-0 left-0"
+          :style="{ zIndex: props.zIndex }">
           <slot name="footer"></slot>
         </div>
       </template>
