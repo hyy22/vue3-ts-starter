@@ -21,6 +21,7 @@ function onTabChange(active: string) {
   <van-tabbar
     :model-value="props.current"
     safe-area-inset-bottom
+    :fixed="false"
     @change="onTabChange">
     <van-tabbar-item v-for="item of tabbars" :key="item.name" :name="item.name">
       {{ item.label }}
