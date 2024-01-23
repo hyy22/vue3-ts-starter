@@ -10,11 +10,13 @@ import router from './router';
 import store from './store';
 import * as components from '@/components';
 import * as directives from './directives';
+import { Lazyload } from 'vant';
 // 适配桌面事件
 import '@vant/touch-emulator';
 
 // 实例
 const app = createApp(App);
+app.use(Lazyload);
 // 注册全局组件
 for (const [key, comp] of Object.entries(components)) {
   app.component(key, comp);
