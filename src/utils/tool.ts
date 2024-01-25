@@ -154,3 +154,19 @@ export function parseJSON<T = any>(json: string): T {
     return null as T;
   }
 }
+
+/**
+ * 数组去重
+ */
+export function uniqueArray<T = any>(
+  array: T[] = [],
+  uniqueFn: (item: T) => any = item => item
+): T[] {
+  const set = new Set();
+  return array.filter(item => {
+    const key = uniqueFn(item);
+    if (set.has(key)) return false;
+    set.add(key);
+    return true;
+  });
+}
