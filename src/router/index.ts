@@ -68,7 +68,7 @@ router.beforeEach(async (to, _, next) => {
     }
     // 未登录
     else {
-      next({ name: 'Login', query: { from: to.path }, replace: true });
+      next({ name: 'Login', query: { from: to.fullPath }, replace: true });
     }
   }
 });

@@ -37,10 +37,13 @@ export const useUserStore = defineStore('user', {
     logout(route = true) {
       this.removeToken();
       this.removeUserInfo();
-      if (route) {
+      if (route && window.location.pathname !== '/login') {
         // 获取当前页面url
-        const path = window.location.href.match(/(\/[^/]+)$/)?.[1] ?? '/';
-        location.replace(`/login?from=${encodeURIComponent(path)}`);
+        const fullPath = window.location.href.replace(
+          window.location.origin,
+          ''
+        );
+        location.replace(`/login?from=${encodeURIComponent(fullPath)}`);
       }
     },
   },
