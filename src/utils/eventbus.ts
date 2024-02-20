@@ -13,7 +13,7 @@ class EventBus {
     }
   }
   // 移除监听
-  public off(type: string, cb: FunctionType) {
+  public off(type: string, cb?: FunctionType) {
     if (this._callbacks[type] && this._callbacks[type].length) {
       if (cb) {
         const index = this._callbacks[type].findIndex(v => v === cb);
