@@ -1,8 +1,21 @@
-import { type Ref, computed } from 'vue';
+import { type Ref, ref, onMounted, onBeforeUnmount, unref } from 'vue';
 
-export default function useRect(target: Ref<HTMLElement | undefined>) {
-  const rect = computed(() => {
-    return target.value?.getBoundingClientRect();
+export default function useRect(
+  target: HTMLElement | Ref<HTMLElement | undefined>
+) {
+  const rect = ref<DOMRect>();
+  const getRect = () => {
+    const elem = unref(target);
+    rect.value = elem?.getBoundingClientRect();
+  };
+  const ob = new ResizeObserver(() => {
+    getRect();
+  });
+  onMounted(() => {
+    ob.observe(unref(target)!);
+  });
+  onBeforeUnmount(() => {
+    ob.disconnect();
   });
   return rect;
 }
