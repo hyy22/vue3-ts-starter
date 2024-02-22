@@ -12,7 +12,8 @@ export default function useRect(
     getRect();
   });
   onMounted(() => {
-    ob.observe(unref(target)!);
+    const elem = unref(target);
+    if (elem) ob.observe(elem);
   });
   onBeforeUnmount(() => {
     ob.disconnect();
