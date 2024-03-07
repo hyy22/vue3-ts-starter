@@ -28,10 +28,17 @@ export const useUserStore = defineStore('user', {
     removeUserInfo() {
       this.userInfo = null;
     },
-    logout() {
+    logout(route = true) {
       this.removeToken();
       this.removeUserInfo();
-      location.replace('/login');
+      if (route && window.location.pathname !== '/login') {
+        // 获取当前页面url
+        const fullPath = window.location.href.replace(
+          window.location.origin,
+          ''
+        );
+        location.replace(`/login?from=${encodeURIComponent(fullPath)}`);
+      }
     },
   },
   persist: {
