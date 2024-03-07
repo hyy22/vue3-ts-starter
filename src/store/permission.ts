@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
 import { dynamicRoutes } from '@/router';
+import { deepCopy } from '@/utils/tool';
 
 interface PermissionStore {
   keys: string[];
@@ -35,34 +36,60 @@ export const usePermissionStore = defineStore('permission', {
       this.hasGenerateRoutes = false;
     },
     generateRoutes() {
-      const addRoutes = filterAccessRoutes(dynamicRoutes, this.keys);
+      const addRoutes = filterRoutes(
+        dynamicRoutes,
+        // 只筛选有权限的路由
+        row =>
+          !row.meta?.permission || this.hasPermission(row.meta?.permission),
+        // 如果组件需要缓存，需要对路由进行改造
+        row => {
+          if (row.meta?.keepAlive) {
+            return {
+              ...row,
+              ...(row.component
+                ? {
+                    component:
+                      typeof row.component === 'function'
+                        ? () =>
+                            (row.component as () => Promise<any>)().then(m => ({
+                              name: row.name,
+                              ...m.default,
+                            }))
+                        : row.component,
+                  }
+                : {}),
+            } as RouteRecordRaw;
+          } else {
+            return row;
+          }
+        }
+      );
       this.addRoutes = addRoutes;
       return addRoutes;
     },
   },
 });
 
-// 根据权限获取动态路由
-function filterAccessRoutes(
-  routes: RouteRecordRaw[] = [],
-  permissions: string[]
+// 筛选路由
+function filterRoutes(
+  routes: RouteRecordRaw[],
+  rule: (row: RouteRecordRaw) => boolean,
+  reducer: (row: RouteRecordRaw) => RouteRecordRaw
 ): RouteRecordRaw[] {
-  const accessRoutes: RouteRecordRaw[] = [];
+  const result: RouteRecordRaw[] = [];
   for (const route of routes) {
-    if (
-      !route?.meta?.permission ||
-      permissions.includes(route.meta.permission as string)
-    ) {
-      const newRoute: RouteRecordRaw = {
-        ...route,
-      };
+    if (rule(route)) {
+      const newRoute =
+        typeof reducer === 'function'
+          ? reducer(deepCopy(route))
+          : deepCopy(route);
       if (newRoute.children?.length) {
-        newRoute.children = filterAccessRoutes(newRoute.children, permissions);
+        newRoute.children = filterRoutes(newRoute.children, rule, reducer);
       }
-      accessRoutes.push(newRoute);
+      result.push(newRoute);
     }
   }
-  return accessRoutes;
+  return result;
 }
 
 // 获取动态路由第一项
