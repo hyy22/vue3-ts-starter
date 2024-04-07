@@ -128,3 +128,34 @@ export function listToTree<T extends ObjectType = ObjectType>(
   }
   return tree as TreeItem<T>[];
 }
+
+/**
+ * 获取叶子第一项
+ */
+export type TreeItemLike = {
+  children?: TreeItemLike[];
+  [key: string]: any;
+};
+export function getFirstLeaf(
+  tree: TreeItemLike | TreeItemLike[],
+  filter?: (item: TreeItemLike) => boolean
+): TreeItemLike | undefined {
+  const isArray = Array.isArray(tree);
+  if (!isArray) {
+    if (!tree.children) {
+      return typeof filter === 'function'
+        ? filter(tree)
+          ? tree
+          : undefined
+        : tree;
+    }
+    return getFirstLeaf(tree.children, filter);
+  } else {
+    for (const item of tree) {
+      const route = getFirstLeaf(item, filter);
+      if (route) {
+        return route;
+      }
+    }
+  }
+}
