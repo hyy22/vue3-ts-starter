@@ -1,5 +1,5 @@
 import { type Ref, ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, type TableInstance } from 'element-plus';
 import useResetModel from '@/hooks/useResetModel';
 import { handleBlobResponse } from '@/api';
 
@@ -31,6 +31,7 @@ export default function useFormSearch<
     pageSize: 20,
     total: 0,
   });
+  const tableRef = ref<TableInstance>();
   const { model, resetModel } = useResetModel<T>(factory);
   /**
    * 查询
@@ -102,5 +103,6 @@ export default function useFormSearch<
     exportLoading,
     exportFile,
     resetModel,
+    tableRef,
   };
 }

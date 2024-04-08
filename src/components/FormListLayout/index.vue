@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { type TableInstance } from 'element-plus';
+
 interface Props {
   page?: PageType | boolean;
+  // 表格实例
+  tableInstance?: TableInstance;
 }
 const props = withDefaults(defineProps<Props>(), {
   page: false,
@@ -23,6 +27,10 @@ function onPageChange(p: Partial<PageType>) {
   const page = Object.assign({}, props.page as PageType, p);
   emit('update:page', page);
   emit('page-change', page);
+  // 滚动表格
+  if (props.tableInstance) {
+    props.tableInstance.scrollTo({ top: 0, left: 0 });
+  }
 }
 </script>
 
