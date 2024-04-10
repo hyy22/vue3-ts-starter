@@ -4,7 +4,10 @@ import { type ResponseData } from './http';
 /**
  * 判断是否响应成功
  */
-export function isResponseOk<T = any>(resp: ResponseData<T>) {
+export function isResponseOk<
+  T = any,
+  U extends ResponseData<T> = ResponseData<any>
+>(resp: U) {
   return [0, 200].includes(resp.code);
 }
 
