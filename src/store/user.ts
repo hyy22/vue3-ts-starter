@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { usePermissionStore } from './permission';
 
 interface UserInfo extends ObjectType {
   // 用户id
@@ -28,16 +29,27 @@ export const useUserStore = defineStore('user', {
     removeUserInfo() {
       this.userInfo = null;
     },
-    logout(route = true) {
+    // 登录
+    login(loginInfo: UserStore) {
+      this.setToken(loginInfo.token);
+      this.setUserInfo(loginInfo.userInfo!);
+      // TODO:模拟权限
+      const permissionStore = usePermissionStore();
+      permissionStore.setPermission(['fake_admin']);
+    },
+    // route是否跳转 isAuto是否自动跳转
+    logout(route = true, isAuto = true) {
       this.removeToken();
       this.removeUserInfo();
-      if (route && window.location.pathname !== '/login') {
+      const loginPath = import.meta.env.VITE_LOGIN_PATH ?? '/login';
+      if (route && window.location.pathname !== loginPath) {
+        if (!isAuto) return location.replace(loginPath);
         // 获取当前页面url
         const fullPath = window.location.href.replace(
           window.location.origin,
           ''
         );
-        location.replace(`/login?from=${encodeURIComponent(fullPath)}`);
+        location.replace(`${loginPath}?from=${encodeURIComponent(fullPath)}`);
       }
     },
   },

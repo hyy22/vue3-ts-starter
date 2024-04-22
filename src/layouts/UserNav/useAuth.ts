@@ -13,7 +13,7 @@ export default function useAuth() {
       return;
     }
     const userStore = useUserStore();
-    userStore.logout();
+    userStore.logout(true, false);
   }
   return {
     logout,

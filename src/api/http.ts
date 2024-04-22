@@ -8,6 +8,7 @@ import { useUserStore } from '@/store/user';
 import useLoading from '@/components/Loading/useLoading';
 import useToast from '@/components/Toast/useToast';
 import { debounce } from '@/utils/tool';
+import { useLogin } from '@/components/Login/useLogin';
 
 export interface AxiosRequestConfigExtra {
   // 是否显示loading
@@ -127,9 +128,23 @@ const debounceToast = debounce(useToast, 500);
  * 响应拦截
  */
 service.interceptors.response.use(
-  (response: AxiosResponse) => {
-    // TODO:code处理
-    // token续签
+  async (response: AxiosResponse) => {
+    const userStore = useUserStore();
+    // TODO:token过期处理
+    if ([-500].includes(response.data.code)) {
+      // 退出登录
+      userStore.logout(false);
+      // 显示全局登录弹窗
+      try {
+        await useLogin();
+        // 重新调用
+        return service(response.config);
+      } catch {
+        const msg = response.data?.msg || '登录失败';
+        useToast(msg);
+        return Promise.reject(new Error(msg));
+      }
+    }
     return response;
   },
   (error: AxiosError) => {
