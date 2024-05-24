@@ -21,7 +21,7 @@ export default function useFormSearch<
   // 查询数据校验格式化
   validateAndFormatParmas?: (model: T) => Promise<U>;
   // 查询方法
-  searchFn: (params?: U) => Promise<FormatResp<E>>;
+  searchFn: (params: U) => Promise<FormatResp<E>>;
 }) {
   // 查询loading
   const loading = ref(false);
