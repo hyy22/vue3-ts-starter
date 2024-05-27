@@ -156,7 +156,7 @@ service.interceptors.response.use(
   (response: AxiosResponse) => {
     // TODO:code处理
     // token续签
-    return response;
+    return response.data;
   },
   (error: AxiosError) => {
     if (error.response) {
@@ -189,12 +189,10 @@ export interface ResponseData<T> extends ObjectType {
   msg: string;
   data: T;
 }
-export default async function request<T = any>(
-  config: HttpRequestConfig
-): Promise<ResponseData<T>> {
+export default async function request<T = any>(config: HttpRequestConfig) {
   try {
-    const response = await service(config);
-    return response.data;
+    const response: ResponseData<T> = await service(config);
+    return response;
   } finally {
     // 处理loading和queue
     handleRequestComplete(config);
